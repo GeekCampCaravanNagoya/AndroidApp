@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.kotlincocktail.pourpal.views.main
 
 @Composable
-fun navigation() {
+fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
