@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.kotlincocktail.pourpal.navigation.navigation
 import com.kotlincocktail.pourpal.ui.theme.PourPalTheme
 import com.kotlincocktail.pourpal.views.test
 
@@ -23,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    test()
+                    navigation()
                 }
             }
         }
@@ -34,6 +35,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     PourPalTheme {
-
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            navigation()
+        }
     }
 }
