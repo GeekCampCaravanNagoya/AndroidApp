@@ -8,6 +8,6 @@ import androidx.navigation.NavHostController
 @Composable
 fun main(navController: NavHostController){
     Column {
-        Text(text = "example")
+        Text(text = "commit test")
     }
 }
