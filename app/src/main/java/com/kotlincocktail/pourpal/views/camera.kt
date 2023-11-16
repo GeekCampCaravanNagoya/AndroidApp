@@ -13,14 +13,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +31,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,14 +44,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.kotlincocktail.pourpal.R
 import com.kotlincocktail.pourpal.viewModels.TakePhoto
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,9 +58,8 @@ fun CameraView(
     navController: NavController,
     applicationContext: Context,
 ) {
-    val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(true) }
+    val scaffoldState = rememberBottomSheetScaffoldState()
     val controller = remember {
         LifecycleCameraController(applicationContext).apply {
             setEnabledUseCases(CameraController.IMAGE_CAPTURE)
@@ -67,43 +69,41 @@ fun CameraView(
 
     val viewModel = viewModel<TakePhoto>()
     val bitmaps by viewModel.bitmaps.collectAsState()
-
-    AndroidView(
-        factory = {
-            PreviewView(it).apply{
-                this.controller = controller
-                controller.bindToLifecycle(lifecycleOwner)
-            }
-        },
-        modifier = Modifier.fillMaxSize()
-    )
-    Row {
-        Button(onClick = {
-            showBottomSheet = true
-        }) { Text(text = "show sheet") }
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState
-            ) {
-                SheetContent(bitmaps)
-            }
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 0.dp,
+        sheetContent = {
+            SheetContent(bitmaps)
         }
-        IconButton(onClick = {
-            takePhoto(
-                applicationContext = applicationContext,
-                controller = controller,
-                onPhotoTaken = viewModel::onTakePhoto
+    ){ padding ->
+        Box(Modifier.fillMaxSize().padding(padding)){
+            AndroidView(
+                factory = {
+                    PreviewView(it).apply{
+                        this.controller = controller
+                        controller.bindToLifecycle(lifecycleOwner)
+                    }
+                },
+                modifier = Modifier.fillMaxSize()
             )
-        }) {
-            Icon(Icons.Filled.Camera,"")
+            Row {
+                Button(onClick = {
+                    scope.launch {
+                        scaffoldState.bottomSheetState.expand()
+                    }
+                }) { Text(text = "show sheet") }
+                IconButton(onClick = {
+                    takePhoto(
+                        applicationContext = applicationContext,
+                        controller = controller,
+                        onPhotoTaken = viewModel::onTakePhoto
+                    )
+                }) {
+                    Icon(Icons.Filled.Camera,"")
+                }
+            }
         }
     }
-
-
-
 }
 fun takePhoto(
     applicationContext: Context,
@@ -116,7 +116,9 @@ fun takePhoto(
             override fun onCaptureSuccess(image: ImageProxy) {
                 super.onCaptureSuccess(image)
                 Log.d("bitmap", "onTakePhoto: ")
-                onPhotoTaken(image.toBitmap())
+                var bitmap:Bitmap = image.toBitmap()
+                bitmap = scaleBitmapDown(bitmap, 640)
+                onPhotoTaken(bitmap)
                 image.close()
             }
 
@@ -127,11 +129,30 @@ fun takePhoto(
         }
     )
 }
+private fun scaleBitmapDown(bitmap: Bitmap, maxDimension: Int): Bitmap {
+    val originalWidth = bitmap.width
+    val originalHeight = bitmap.height
+    var resizedWidth = maxDimension
+    var resizedHeight = maxDimension
+    if (originalHeight > originalWidth) {
+        resizedHeight = maxDimension
+        resizedWidth =
+            (resizedHeight * originalWidth.toFloat() / originalHeight.toFloat()).toInt()
+    } else if (originalWidth > originalHeight) {
+        resizedWidth = maxDimension
+        resizedHeight =
+            (resizedWidth * originalHeight.toFloat() / originalWidth.toFloat()).toInt()
+    } else if (originalHeight == originalWidth) {
+        resizedHeight = maxDimension
+        resizedWidth = maxDimension
+    }
+    return Bitmap.createScaledBitmap(bitmap, resizedWidth, resizedHeight, false)
+}
 
 @Composable
 fun SheetContent(bitmaps: List<Bitmap>) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(5)
+        columns = GridCells.Fixed(4)
     ) {
         Log.d("bitmaps", "bitmaps: "+bitmaps.size)
         items(bitmaps){
@@ -143,11 +164,12 @@ fun SheetContent(bitmaps: List<Bitmap>) {
 @Composable
 fun Gallery(bitmap: Bitmap) {
     var isCheck  by remember { mutableStateOf(false) }
+    val rememberedBitmap = remember { bitmap }
     Box(modifier = Modifier
         .border(width = 1.dp, color = Color.Gray)
         .clickable { isCheck = !isCheck }){
         Image(
-            bitmap = bitmap.asImageBitmap(),
+            bitmap = rememberedBitmap.asImageBitmap(),
             contentDescription = ""
         )
         RadioButton(selected = isCheck, onClick = {isCheck = !isCheck})
