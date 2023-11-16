@@ -26,7 +26,7 @@ import com.kotlincocktail.pourpal.ui.theme.DarkGray
 import com.kotlincocktail.pourpal.ui.theme.LightGray
 
 @Composable
-fun loadingView(navController: NavHostController) {
+fun LoadingView(navController: NavHostController) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Black)) {

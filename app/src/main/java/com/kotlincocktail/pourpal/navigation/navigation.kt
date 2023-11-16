@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kotlincocktail.pourpal.views.CameraView
 import com.kotlincocktail.pourpal.views.MainView
-import com.kotlincocktail.pourpal.views.loadingView
+import com.kotlincocktail.pourpal.views.LoadingView
 
 @Composable
 fun Navigation() {
@@ -23,7 +23,7 @@ fun Navigation() {
             CameraView(navController=navController)
         }
         composable(route = "loading") {
-            loadingView(navController=navController)
+            LoadingView(navController=navController)
         }
 //メモ
 //        composable(route = "page2") {
