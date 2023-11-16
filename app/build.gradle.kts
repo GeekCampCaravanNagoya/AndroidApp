@@ -52,8 +52,7 @@ android {
 }
 
 dependencies {
-
-
+    
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.0")
@@ -64,6 +63,18 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
+
+    //カメラの依存関係
+    val camerax = "1.4.0-alpha02"
+    implementation ("androidx.camera:camera-core:${camerax}")
+    implementation ("androidx.camera:camera-camera2:${camerax}")
+    implementation ("androidx.camera:camera-lifecycle:${camerax}")
+    implementation ("androidx.camera:camera-video:${camerax}")
+    implementation ("androidx.camera:camera-view:${camerax}")
+    implementation ("androidx.camera:camera-extensions:${camerax}")
+
+    //Permission管理
+    implementation ("com.google.accompanist:accompanist-permissions:0.23.1")
 
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
 

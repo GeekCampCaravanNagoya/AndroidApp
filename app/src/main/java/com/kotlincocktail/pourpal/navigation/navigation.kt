@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kotlincocktail.pourpal.views.loadingView
-import com.kotlincocktail.pourpal.views.main
+import com.kotlincocktail.pourpal.views.CameraView
+import com.kotlincocktail.pourpal.views.MainView
+import com.kotlincocktail.pourpal.views.LoadingView
 
 @Composable
 fun Navigation() {
@@ -16,10 +17,13 @@ fun Navigation() {
     ) {
 
         composable(route = "main") {
-            main(navController=navController)
+            MainView(navController=navController)
         }
-        composable(route="loading") {
-            loadingView()
+        composable(route = "camera") {
+            CameraView(navController=navController)
+        }
+        composable(route = "loading") {
+            LoadingView(navController=navController)
         }
 //メモ
 //        composable(route = "page2") {
