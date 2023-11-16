@@ -16,13 +16,20 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = DarkGray,
+private val darkColorScheme = darkColorScheme(
+    primary = Beige,
     secondary = Gray,
-    tertiary = LightGray
+    tertiary = LightGray,
+    background = DarkBlue,
+    surface = DarkBlue,
+    onPrimary = Black,
+    onSecondary = LightGray,
+    onTertiary = Color.White,
+    onBackground = Color.White,
+    onSurface = Beige,
 )
 
-private val LightColorScheme = lightColorScheme(
+private val lightColorScheme = lightColorScheme(
     primary = Beige,
     secondary = Gray,
     tertiary = LightGray,
@@ -48,8 +55,8 @@ fun PourPalTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> darkColorScheme
+        else -> lightColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
@@ -61,8 +68,10 @@ fun PourPalTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = lightColorScheme,
         typography = Typography,
         content = content
     )
+
+    
 }
