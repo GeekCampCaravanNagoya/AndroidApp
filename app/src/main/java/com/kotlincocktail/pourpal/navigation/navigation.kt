@@ -1,14 +1,11 @@
 package com.kotlincocktail.pourpal.navigation
 
 import android.content.Context
-import androidx.camera.view.CameraController
-import androidx.camera.view.LifecycleCameraController
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kotlincocktail.pourpal.views.CameraView
+import com.kotlincocktail.pourpal.views.ResultListView
 
 @Composable
 fun Navigation(applicationContext: Context) {
@@ -21,16 +18,16 @@ fun Navigation(applicationContext: Context) {
         startDestination = "main"
     ) {
 
-        composable(route = "main") {
-            CameraView(
-                navController=navController,
-                applicationContext = applicationContext
-            )
-        }
-//メモ
-//        composable(route = "page2") {
-//            page2(navController)
+//        composable(route = "main") {
+//            CameraView(
+//                navController=navController,
+//                applicationContext = applicationContext
+//            )
 //        }
+//メモ
+        composable(route = "main") {
+            ResultListView(navController =navController, names = arrayOf("a"))
+        }
 //        composable(
 //            route = "page3/{id}/{title}",
 //            arguments = listOf(
@@ -44,3 +41,4 @@ fun Navigation(applicationContext: Context) {
 //        }
     }
 }
+

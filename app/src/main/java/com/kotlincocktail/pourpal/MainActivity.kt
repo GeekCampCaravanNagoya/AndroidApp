@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import com.kotlincocktail.pourpal.navigation.Navigation
 import com.kotlincocktail.pourpal.ui.theme.PourPalTheme
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!hasRequiredPermissions()) {
@@ -25,6 +27,9 @@ class MainActivity : ComponentActivity() {
                 this, PERMISSIONS,0
             )
         }
+        // database初期化
+        DatabaseManager.initialize(this)
+
         setContent {
             PourPalTheme {
                 // A surface container using the 'background' color from the theme
