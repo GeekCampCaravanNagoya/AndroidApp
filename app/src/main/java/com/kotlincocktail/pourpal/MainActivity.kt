@@ -32,11 +32,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PourPalTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Navigation(applicationContext)
+                Surface {
+                    Navigation()
                 }
             }
         }

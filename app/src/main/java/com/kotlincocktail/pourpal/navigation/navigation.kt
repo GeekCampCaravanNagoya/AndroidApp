@@ -6,6 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kotlincocktail.pourpal.views.ResultListView
+import com.kotlincocktail.pourpal.views.CameraView
+import com.kotlincocktail.pourpal.views.MainView
+import com.kotlincocktail.pourpal.views.LoadingView
 
 @Composable
 fun Navigation(applicationContext: Context) {
@@ -26,6 +29,15 @@ fun Navigation(applicationContext: Context) {
 //        }
 //メモ
         composable(route = "main") {
+            MainView(navController=navController)
+        }
+        composable(route = "camera") {
+            CameraView(navController=navController)
+        }
+        composable(route = "loading") {
+            LoadingView(navController=navController)
+        }
+        composable(route = "result/list") {
             ResultListView(navController =navController, names = arrayOf("a"))
         }
 //        composable(
