@@ -1,21 +1,33 @@
 package com.kotlincocktail.pourpal.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kotlincocktail.pourpal.views.ResultListView
 import com.kotlincocktail.pourpal.views.CameraView
 import com.kotlincocktail.pourpal.views.MainView
 import com.kotlincocktail.pourpal.views.LoadingView
 
 @Composable
-fun Navigation() {
+fun Navigation(applicationContext: Context) {
     val navController = rememberNavController()
+
+
+
     NavHost(
         navController = navController,
         startDestination = "main"
     ) {
 
+//        composable(route = "main") {
+//            CameraView(
+//                navController=navController,
+//                applicationContext = applicationContext
+//            )
+//        }
+//メモ
         composable(route = "main") {
             MainView(navController=navController)
         }
@@ -25,10 +37,9 @@ fun Navigation() {
         composable(route = "loading") {
             LoadingView(navController=navController)
         }
-//メモ
-//        composable(route = "page2") {
-//            page2(navController)
-//        }
+        composable(route = "result/list") {
+            ResultListView(navController =navController, names = arrayOf("a"))
+        }
 //        composable(
 //            route = "page3/{id}/{title}",
 //            arguments = listOf(
@@ -42,3 +53,4 @@ fun Navigation() {
 //        }
     }
 }
+
