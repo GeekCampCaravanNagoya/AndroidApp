@@ -84,4 +84,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //MLkitの依存関係
+    implementation ("com.google.firebase:firebase-ml-vision:24.0.3")
 }
