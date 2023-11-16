@@ -1,21 +1,26 @@
 package com.kotlincocktail.pourpal.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kotlincocktail.pourpal.views.main
+import com.kotlincocktail.pourpal.views.CameraView
+import com.kotlincocktail.pourpal.views.maintest
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "camera"
     ) {
 
         composable(route = "main") {
-            main(navController=navController)
+            maintest()
+        }
+        composable(route = "camera") {
+            CameraView()
         }
 //メモ
 //        composable(route = "page2") {
