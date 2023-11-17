@@ -49,9 +49,10 @@ fun HomeView(navController: NavController) {
             modifier = Modifier.align(Alignment.Center)
 
         )
+
         //カメラボタン
         Button(
-            onClick = { navController.navigate("main") },
+            onClick = { navController.navigate("camera") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkGray,
                 contentColor = Gray
@@ -65,8 +66,6 @@ fun HomeView(navController: NavController) {
                     shape = RoundedCornerShape(20)
                 ),
             contentPadding = PaddingValues(0.dp)
-
-
         ) {
             Icon(
                 imageVector = Icons.Filled.CameraAlt,
@@ -78,7 +77,7 @@ fun HomeView(navController: NavController) {
         }
         //検索ボタン
         Button(
-            onClick = { navController.navigate("main") },
+            onClick = { navController.navigate("search") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkGray,
                 contentColor = Gray
@@ -108,7 +107,7 @@ fun HomeView(navController: NavController) {
 
         //キープボトルボタン
         Button(
-            onClick = { navController.navigate("main") },
+            onClick = { navController.navigate("home") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkGray,
                 contentColor = Gray
