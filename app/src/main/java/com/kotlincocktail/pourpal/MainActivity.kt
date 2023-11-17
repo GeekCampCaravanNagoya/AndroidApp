@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import com.kotlincocktail.pourpal.navigation.Navigation
-import com.kotlincocktail.pourpal.textrecognize.MenuAnalyzer
 import com.kotlincocktail.pourpal.ui.theme.PourPalTheme
 
 class MainActivity : ComponentActivity() {

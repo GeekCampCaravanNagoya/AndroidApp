@@ -117,4 +117,7 @@ dependencies {
 
     //MLkitの依存関係
     implementation ("com.google.firebase:firebase-ml-vision:24.0.3")
+
+    //GoogleFontsの依存関係
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.3.0")
 }

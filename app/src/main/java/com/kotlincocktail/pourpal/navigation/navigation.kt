@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kotlincocktail.pourpal.views.ResultListView
 import com.kotlincocktail.pourpal.views.CameraView
+import com.kotlincocktail.pourpal.views.HomeView
 import com.kotlincocktail.pourpal.views.MainView
 import com.kotlincocktail.pourpal.views.LoadingView
 import com.kotlincocktail.pourpal.views.ResultCardView
@@ -20,7 +21,7 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "home"
     ) {
 
 //        composable(route = "main") {
@@ -30,6 +31,10 @@ fun Navigation() {
 //            )
 //        }
 //メモ
+        composable(route = "home"){
+            HomeView(navController=navController)
+        }
+
         composable(route = "main") {
             MainView(navController=navController)
         }
