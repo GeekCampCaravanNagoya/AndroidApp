@@ -9,22 +9,27 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.kotlincocktail.pourpal.views.ResultListView
+import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.views.CameraView
 import com.kotlincocktail.pourpal.views.HomeView
+<<<<<<< HEAD
 import com.kotlincocktail.pourpal.views.MainView
+=======
+>>>>>>> main
 import com.kotlincocktail.pourpal.views.LoadingView
-import com.kotlincocktail.pourpal.views.ResultCardView
+import com.kotlincocktail.pourpal.views.ResultView
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
     var imageProxy by remember { mutableStateOf<ImageProxy?>(null) }
-    var resultString by remember { mutableStateOf("") }
+    var resultList by remember { mutableStateOf<List<Cocktail>>(emptyList()) }
+
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "home"
     ) {
+<<<<<<< HEAD
 
 //        composable(route = "main") {
 //            CameraView(
@@ -39,6 +44,10 @@ fun Navigation() {
 
         composable(route = "main") {
             MainView(navController=navController)
+=======
+        composable(route = "home"){
+            HomeView(navController=navController)
+>>>>>>> main
         }
         composable(route = "camera") {
             CameraView(
@@ -52,17 +61,17 @@ fun Navigation() {
             LoadingView(
                 navController=navController,
                 imageProxy = imageProxy,
-                resultString = {
-                    resultString = it
+                resultList = {
+                    resultList = it
                 }
             )
         }
-        composable(route = "result/card") {
+        composable(route = "result") {
 //            ResultCardView(resultString)
-            ResultCardView()
+            ResultView(navController,resultList)
         }
-        composable(route = "result/list") {
-            ResultListView(navController =navController, names = arrayOf("a"))
+        composable(route = "search") {
+            HomeView(navController =navController)
         }
         
 //メモ

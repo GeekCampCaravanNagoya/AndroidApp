@@ -10,6 +10,7 @@ import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.entity.CocktailRecipe
 
 @Database(entities = [Cocktail::class, Recipe::class, CocktailRecipe::class], version = 3)
+
 abstract class Schema : RoomDatabase() {
     abstract fun CocktailDao(): CocktailDao
     abstract fun RecipeDao(): RecipeDao
