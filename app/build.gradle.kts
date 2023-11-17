@@ -83,6 +83,9 @@ dependencies {
     //Permission管理
     implementation ("com.google.accompanist:accompanist-permissions:0.23.1")
 
+    //Firebaseの依存関係
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+
     //DatabaseのROOMライブラリ
     val room_version = "2.5.0"
 
