@@ -6,6 +6,9 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.kotlincocktail.pourpal.entity.Cocktail
 
+
+
+
 @Dao
 interface CocktailDao {
     @Query("SELECT * FROM Cocktail")
