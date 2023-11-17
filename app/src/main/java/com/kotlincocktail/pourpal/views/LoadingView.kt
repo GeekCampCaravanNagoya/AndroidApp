@@ -35,9 +35,14 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
 import com.kotlincocktail.pourpal.R
+import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import com.kotlincocktail.pourpal.ui.theme.Black
 import com.kotlincocktail.pourpal.ui.theme.DarkGray
 import com.kotlincocktail.pourpal.ui.theme.LightGray
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @OptIn(ExperimentalGetImage::class) @Composable
@@ -57,7 +62,18 @@ fun LoadingView(
                     mediaImage, imageProxy.imageInfo.rotationDegrees)
                 textRecognizer.process(image)
                     .addOnSuccessListener { visionText ->
+                        // 解析結果
                         Log.d("OCR", visionText.text)
+                        val cocktailNames = visionText.text.split("\n")
+                        // DBから取得
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val cocktailDao = DatabaseManager.database.CocktailDao()
+                            // 取得結果
+                            val result = cocktailDao.findCocktailsByName(cocktailNames)
+                        }
+
+
+
                         resultString(visionText.text)
                     }
                     .addOnFailureListener { exc ->

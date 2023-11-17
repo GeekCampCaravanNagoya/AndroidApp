@@ -45,7 +45,8 @@ fun Navigation() {
             )
         }
         composable(route = "result/card") {
-            ResultCardView(resultString)
+//            ResultCardView(resultString)
+            ResultCardView()
         }
         composable(route = "result/list") {
             ResultListView(navController =navController, names = arrayOf("a"))

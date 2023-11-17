@@ -19,5 +19,5 @@ data class Cocktail (
     val cocktail_digest: String,
     val cocktail_desc: String,
     val recipe_desc: String,
-    val cocktail_img: String
+    val cocktail_img: String?
 )

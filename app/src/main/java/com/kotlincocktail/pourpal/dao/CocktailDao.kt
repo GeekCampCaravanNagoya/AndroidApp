@@ -10,6 +10,9 @@ import com.kotlincocktail.pourpal.entity.Cocktail
 interface CocktailDao {
     @Query("SELECT * FROM Cocktail")
     fun getAll(): List<Cocktail>
+
+    @Query("SELECT * FROM Cocktail WHERE cocktail_name IN (:names)")
+    fun findCocktailsByName(names: List<String>): List<Cocktail>
     @Insert
     fun insertAll(vararg cocktail: Cocktail)
     @Delete
