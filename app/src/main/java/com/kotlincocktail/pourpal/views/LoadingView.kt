@@ -2,6 +2,7 @@ package com.kotlincocktail.pourpal.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +31,7 @@ fun LoadingView(navController: NavHostController) {
     Box(modifier = Modifier
         .fillMaxSize()
         .background(Black)) {
-        Card(modifier = Modifier
+        Card(modifier = Modifier.clickable{navController.navigate("result/card")}//TODO delete clickable()
             .fillMaxWidth(0.8f)
             .height(240.dp)
             .align(Alignment.Center),
