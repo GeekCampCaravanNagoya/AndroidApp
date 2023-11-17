@@ -57,46 +57,46 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ResultCardView(navController: NavHostController) {
+fun ResultCardView(navController: NavHostController, resultList: List<Cocktail>) {
 
-    val cocktails = listOf(
-            Cocktail(
-                cocktail_id = 1,
-                cocktail_name = "マルガリータ",
-                cocktail_name_english = "Margarita",
-                base_name = "テキーラ",
-                technique_name = "シェイク",
-                taste_name = "サワー",
-                style_name = "ショート",
-                alcohol = 15,
-                top_name = "ライム",
-                glass_name = "カクテルグラス",
-                type_name = "クラシック",
-                cocktail_digest = "フレッシュなライムの香りが特徴",
-                cocktail_desc = "テキーラベースの代表的なカクテル",
-                recipe_desc = "テキーラ、トリプルセック、ライムジュースをシェイク",
-                cocktail_img = "margarita.jpg"
-            ),
-    Cocktail(
-        cocktail_id = 2,
-        cocktail_name = "モヒート",
-        cocktail_name_english = "Mojito",
-        base_name = "ラム",
-        technique_name = "ビルド",
-        taste_name = "スウィート",
-        style_name = "ロング",
-        alcohol = 10,
-        top_name = "ミント",
-        glass_name = "ハイボールグラス",
-        type_name = "リフレッシング",
-        cocktail_digest = "ミントの爽やかさが魅力",
-        cocktail_desc = "ラムベースの爽やかなカクテル",
-        recipe_desc = "ラム、ミント、砂糖、ソーダ水をミックス",
-        cocktail_img = "mojito.jpg"
-    )
-    // さらにダミーデータを追加する場合は、このようにリストに追加していきます
-    )
-    val pagerState = rememberPagerState(pageCount = { cocktails.size })
+//    val resultList = listOf(
+//            Cocktail(
+//                cocktail_id = 1,
+//                cocktail_name = "マルガリータ",
+//                cocktail_name_english = "Margarita",
+//                base_name = "テキーラ",
+//                technique_name = "シェイク",
+//                taste_name = "サワー",
+//                style_name = "ショート",
+//                alcohol = 15,
+//                top_name = "ライム",
+//                glass_name = "カクテルグラス",
+//                type_name = "クラシック",
+//                cocktail_digest = "フレッシュなライムの香りが特徴",
+//                cocktail_desc = "テキーラベースの代表的なカクテル",
+//                recipe_desc = "テキーラ、トリプルセック、ライムジュースをシェイク",
+//                cocktail_img = "margarita.jpg"
+//            ),
+//            Cocktail(
+//                cocktail_id = 2,
+//                cocktail_name = "モヒート",
+//                cocktail_name_english = "Mojito",
+//                base_name = "ラム",
+//                technique_name = "ビルド",
+//                taste_name = "スウィート",
+//                style_name = "ロング",
+//                alcohol = 10,
+//                top_name = "ミント",
+//                glass_name = "ハイボールグラス",
+//                type_name = "リフレッシング",
+//                cocktail_digest = "ミントの爽やかさが魅力",
+//                cocktail_desc = "ラムベースの爽やかなカクテル",
+//                recipe_desc = "ラム、ミント、砂糖、ソーダ水をミックス",
+//                cocktail_img = "mojito.jpg"
+//    )
+//     //さらにダミーデータを追加する場合は、このようにリストに追加していきます
+//    )
+    val pagerState = rememberPagerState(pageCount = { resultList.size })
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
     val scope = rememberCoroutineScope()
@@ -131,7 +131,7 @@ fun ResultCardView(navController: NavHostController) {
                     .padding(40.dp)
             ) {// TODO リスト表示場所
                 LazyColumn(content = {
-                    itemsIndexed(items = cocktails ) {index, cocktail ->
+                    itemsIndexed(items = resultList ) {index, cocktail ->
                         Text(
                             fontSize = 25.sp,
                             text = cocktail.cocktail_name,
@@ -164,7 +164,7 @@ fun ResultCardView(navController: NavHostController) {
             ) { page ->
                 val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
                 CardContent(
-                    resultString = cocktails[page].cocktail_name,
+                    cocktail = resultList[page],
                     modifier = Modifier
                         .height((680 - (pageOffset * 60)).dp)
                         .fillMaxWidth()
@@ -201,7 +201,7 @@ fun ResultCardView(navController: NavHostController) {
 }
 
 @Composable
-fun CardContent(resultString: String, modifier:Modifier) {//TODO　カード表示の場所
+fun CardContent(modifier: Modifier, cocktail: Cocktail) {//TODO　カード表示の場所
     ElevatedCard(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
@@ -262,7 +262,7 @@ fun CardContent(resultString: String, modifier:Modifier) {//TODO　カード表�
                     )
                     .background(Black)
                     .padding(8.dp),
-                text = "ジントニック"
+                text = cocktail.cocktail_name
             )
         }
     }
