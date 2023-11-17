@@ -74,7 +74,7 @@ fun LoadingView(
                     .addOnCompleteListener {
                         // 認識が終わったら、画像を解放する
                         imageProxy.close()
-                        navController.navigate("result/card") {
+                        navController.navigate("result") {
                             popUpTo("camera") { inclusive = true }
                         }
                     }
@@ -87,7 +87,7 @@ fun LoadingView(
         .background(Black)) {
         Card(
             modifier = Modifier
-                .clickable { navController.navigate("result/card") }//TODO delete clickable()
+                .clickable { navController.navigate("result") }//TODO delete clickable()
                 .fillMaxWidth(0.8f)
                 .height(240.dp)
                 .align(Alignment.Center),

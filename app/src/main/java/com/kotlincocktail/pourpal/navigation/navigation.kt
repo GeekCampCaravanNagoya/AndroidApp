@@ -10,12 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.kotlincocktail.pourpal.entity.Cocktail
-import com.kotlincocktail.pourpal.views.ResultListView
 import com.kotlincocktail.pourpal.views.CameraView
 import com.kotlincocktail.pourpal.views.HomeView
-import com.kotlincocktail.pourpal.views.MainView
 import com.kotlincocktail.pourpal.views.LoadingView
-import com.kotlincocktail.pourpal.views.ResultCardView
+import com.kotlincocktail.pourpal.views.ResultView
 
 @Composable
 fun Navigation() {
@@ -29,10 +27,6 @@ fun Navigation() {
     ) {
         composable(route = "home"){
             HomeView(navController=navController)
-        }
-
-        composable(route = "main") {
-            MainView(navController=navController)
         }
         composable(route = "camera") {
             CameraView(
@@ -51,12 +45,12 @@ fun Navigation() {
                 }
             )
         }
-        composable(route = "result/card") {
+        composable(route = "result") {
 //            ResultCardView(resultString)
-            ResultCardView(navController,resultList)
+            ResultView(navController,resultList)
         }
-        composable(route = "result/list") {
-            ResultListView(navController =navController, names = arrayOf("a"))
+        composable(route = "search") {
+            HomeView(navController =navController)
         }
     }
 }
