@@ -3,6 +3,7 @@ package com.kotlincocktail.pourpal.views
 import android.Manifest
 import android.content.Context
 import android.util.Log
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.ImageProxy
@@ -65,7 +66,10 @@ import com.kotlincocktail.pourpal.R
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
-fun CameraView(navController: NavHostController) {
+fun CameraView(
+    navController: NavHostController,
+    capturedImageProxy: (ImageProxy) -> Unit
+) {
     val permissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val sheetState = rememberModalBottomSheetState()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -95,9 +99,10 @@ fun CameraView(navController: NavHostController) {
                             .clickable {
                                 takePhoto(
                                     applicationContext = applicationContext,
-                                    controller = controller
+                                    controller = controller,
+                                    navController = navController,
+                                    capturedImageProxy = capturedImageProxy
                                 )
-                                navController.navigate("loading")
                             },
                             painter = painterResource(id = R.drawable.shutter2), contentDescription = "")
                     }
@@ -202,18 +207,18 @@ fun PermissionRationaleDialog(onDialogResult: ()->Unit) {
 
 fun takePhoto(
     applicationContext: Context,
-    controller: LifecycleCameraController
+    controller: LifecycleCameraController,
+    navController: NavHostController,
+    capturedImageProxy: (ImageProxy) -> Unit
 ){
     controller.takePicture(
         ContextCompat.getMainExecutor(applicationContext),
         object : ImageCapture.OnImageCapturedCallback() {
-            override fun onCaptureSuccess(image: ImageProxy) {
-                super.onCaptureSuccess(image)
-                Log.d("bitmap", "onTakePhoto: ")
-//                var bitmap: Bitmap = image.toBitmap()
-                image.close()
-            }
-
+            @androidx.annotation.OptIn(ExperimentalGetImage::class) override fun onCaptureSuccess(imageProxy: ImageProxy) {
+                super.onCaptureSuccess(imageProxy)
+                    capturedImageProxy(imageProxy)
+                    navController.navigate("loading")
+                }
             override fun onError(exception: ImageCaptureException) {
                 super.onError(exception)
                 Log.e("Camera", "Couldn't take photo: ", exception )

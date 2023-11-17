@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
@@ -40,7 +39,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ResultCardView() {
+fun ResultCardView(resultString: String) {
     val pagerState = rememberPagerState(pageCount = { 20 })
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
@@ -104,7 +103,7 @@ fun ResultCardView() {
             ) { page ->
                 val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
                 CardContent(
-                    page = page,
+                    resultString = resultString,
                     modifier = Modifier
                         .padding(vertical = (100 + (pageOffset * 20)).dp)
                         .fillMaxSize()
@@ -141,16 +140,11 @@ fun ResultCardView() {
 }
 
 @Composable
-fun CardContent(page:Int, modifier:Modifier) {//TODO　カード表示の場所
+fun CardContent(resultString: String, modifier:Modifier) {//TODO　カード表示の場所
     ElevatedCard(
         colors = CardDefaults.cardColors(DarkGray),
         modifier = modifier
     ) {
-        Text(text = page.toString())
+        Text(text = resultString)
     }
-}
-@Preview
-@Composable
-fun mainPreview() {
-    ResultCardView()
 }

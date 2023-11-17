@@ -1,34 +1,42 @@
 package com.kotlincocktail.pourpal
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import com.kotlincocktail.pourpal.navigation.Navigation
 import com.kotlincocktail.pourpal.ui.theme.PourPalTheme
+import java.io.File
+import java.io.FileOutputStream
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!hasRequiredPermissions()) {
-            ActivityCompat.requestPermissions(
-                this, PERMISSIONS,0
-            )
-        }
         // database初期化
         DatabaseManager.initialize(this)
+
+        try {
+            val inputStream = assets.open("jpn.traineddata")
+            val tessdataDir = File(applicationContext.filesDir, "tessdata")
+            if (!tessdataDir.exists()) {
+                tessdataDir.mkdir()
+            }
+
+            val outputStream = FileOutputStream(File(tessdataDir, "jpn.traineddata"))
+
+            val buffer = ByteArray(1024)
+            var length = 0
+            while (inputStream.read(buffer).also { length = it } > 0) {
+                outputStream.write(buffer, 0, length)
+            }
+
+            inputStream.close()
+            outputStream.close()
+        }catch (e:Exception){
+            e.stackTrace
+        }
 
         setContent {
             PourPalTheme {
@@ -37,20 +45,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    private fun hasRequiredPermissions():Boolean{
-        return PERMISSIONS.all{
-            ContextCompat.checkSelfPermission(
-                applicationContext,
-                it
-            ) == PackageManager.PERMISSION_GRANTED
-        }
-    }
-    companion object {
-        private val PERMISSIONS = arrayOf(
-            Manifest.permission.CAMERA,
-        )
     }
 
 }
