@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "766646645913",
-    "project_id": "geekcampcaravannagoya",
-    "storage_bucket": "geekcampcaravannagoya.appspot.com"
+    "project_number": "411706163921",
+    "project_id": "pourpal-cc2db",
+    "storage_bucket": "pourpal-cc2db.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:766646645913:android:e45ddd5238c714101c7408",
+        "mobilesdk_app_id": "1:411706163921:android:e46d8e98f57aa7c2c67bf0",
         "android_client_info": {
           "package_name": "com.kotlincocktail.pourpal"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAG5upzYyS9r-ZcH-8zZAGM5MMBKTQpWYA"
+          "current_key": "AIzaSyB_jRA0HNOPeqCZ8PAm8o0WdgEjX3UeHKQ"
         }
       ],
       "services": {
