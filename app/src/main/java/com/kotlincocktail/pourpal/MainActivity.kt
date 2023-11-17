@@ -17,27 +17,6 @@ class MainActivity : ComponentActivity() {
         // database初期化
         DatabaseManager.initialize(this)
 
-        try {
-            val inputStream = assets.open("jpn.traineddata")
-            val tessdataDir = File(applicationContext.filesDir, "tessdata")
-            if (!tessdataDir.exists()) {
-                tessdataDir.mkdir()
-            }
-
-            val outputStream = FileOutputStream(File(tessdataDir, "jpn.traineddata"))
-
-            val buffer = ByteArray(1024)
-            var length = 0
-            while (inputStream.read(buffer).also { length = it } > 0) {
-                outputStream.write(buffer, 0, length)
-            }
-
-            inputStream.close()
-            outputStream.close()
-        }catch (e:Exception){
-            e.stackTrace
-        }
-
         setContent {
             PourPalTheme {
                 Surface {
