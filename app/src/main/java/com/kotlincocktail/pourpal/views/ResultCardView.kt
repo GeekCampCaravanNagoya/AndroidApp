@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.ui.theme.DarkBlue
 import com.kotlincocktail.pourpal.ui.theme.DarkGray
 import com.kotlincocktail.pourpal.ui.theme.DarkRed
@@ -39,8 +41,47 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ResultCardView(resultString: String) {
-    val pagerState = rememberPagerState(pageCount = { 20 })
+fun ResultCardView(
+//    cocktails: List<Cocktail>
+) {
+    val cocktails = listOf(
+            Cocktail(
+                cocktail_id = 1,
+                cocktail_name = "マルガリータ",
+                cocktail_name_english = "Margarita",
+                base_name = "テキーラ",
+                technique_name = "シェイク",
+                taste_name = "サワー",
+                style_name = "ショート",
+                alcohol = 15,
+                top_name = "ライム",
+                glass_name = "カクテルグラス",
+                type_name = "クラシック",
+                cocktail_digest = "フレッシュなライムの香りが特徴",
+                cocktail_desc = "テキーラベースの代表的なカクテル",
+                recipe_desc = "テキーラ、トリプルセック、ライムジュースをシェイク",
+                cocktail_img = "margarita.jpg"
+            ),
+    Cocktail(
+        cocktail_id = 2,
+        cocktail_name = "モヒート",
+        cocktail_name_english = "Mojito",
+        base_name = "ラム",
+        technique_name = "ビルド",
+        taste_name = "スウィート",
+        style_name = "ロング",
+        alcohol = 10,
+        top_name = "ミント",
+        glass_name = "ハイボールグラス",
+        type_name = "リフレッシング",
+        cocktail_digest = "ミントの爽やかさが魅力",
+        cocktail_desc = "ラムベースの爽やかなカクテル",
+        recipe_desc = "ラム、ミント、砂糖、ソーダ水をミックス",
+        cocktail_img = "mojito.jpg"
+    )
+    // さらにダミーデータを追加する場合は、このようにリストに追加していきます
+    )
+    val pagerState = rememberPagerState(pageCount = { cocktails.size })
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
     val scope = rememberCoroutineScope()
@@ -75,14 +116,14 @@ fun ResultCardView(resultString: String) {
                     .padding(40.dp)
             ) {// TODO リスト表示場所
                 LazyColumn(content = {
-                    items(count = 5) {
+                    items(cocktails) {cocktail ->
                         Text(
                             fontSize = 25.sp,
-                            text = "ジントニック",
+                            text = cocktail.cocktail_name,
                             modifier = Modifier.padding(4.dp).clickable{
                                 coroutineScope.launch {
                                     drawerState.close()
-                                    pagerState.animateScrollToPage(it)
+                                    pagerState.animateScrollToPage(cocktail.cocktail_id)
                                 }
                             }
                         )
@@ -103,7 +144,7 @@ fun ResultCardView(resultString: String) {
             ) { page ->
                 val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
                 CardContent(
-                    resultString = resultString,
+                    resultString = cocktails[page].cocktail_name,
                     modifier = Modifier
                         .padding(vertical = (100 + (pageOffset * 20)).dp)
                         .fillMaxSize()
