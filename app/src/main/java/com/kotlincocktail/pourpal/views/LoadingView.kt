@@ -63,9 +63,12 @@ fun LoadingView(
                         // DBから取得
                         CoroutineScope(Dispatchers.IO).launch {
                             val cocktailDao = DatabaseManager.database.CocktailDao()
+                            val cocktailRecipeDao = DatabaseManager.database.CocktailRecipeDao()
                             // 取得結果
-                            val result = cocktailDao.findCocktailsByName(cocktailNames)
-                            resultList(result)
+                            val cocktails = cocktailDao.findCocktailsByName(cocktailNames)
+                            val cocktailIds = cocktails.map { it.cocktail_id }.toIntArray()
+                            val recipes = cocktailRecipeDao.getCocktailRecipesWithJoin(cocktailIds)
+                            resultList(cocktails)
                         }
                     }
                     .addOnFailureListener { exc ->
