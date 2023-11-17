@@ -9,7 +9,7 @@ object DatabaseManager {
         private set
 
     fun initialize(context: Context) {
-        database = Room.databaseBuilder(context, Schema::class.java, "my-database").build()
+        database = Room.databaseBuilder(context, Schema::class.java, "my-database").fallbackToDestructiveMigration().createFromAsset("pourpal.db").build()
     }
 
 }

@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.mlkit.vision.common.InputImage
 import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,20 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainView(navController: NavHostController) {
+    LaunchedEffect("") {
+                        // DBから取得
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val cocktailDao = DatabaseManager.database.CocktailDao()
+                            // 取得結果
+                            val result = cocktailDao.getAll()
+                            for (element in result) {
+                                Log.d("log", element.cocktail_name)
+                            }
+                        }
+    }
+
+
+
 
     Column(Modifier.fillMaxSize()) {
         Button(onClick = { navController.navigate("camera") }) {
