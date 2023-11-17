@@ -21,18 +21,11 @@ fun Navigation() {
     val navController = rememberNavController()
     var imageProxy by remember { mutableStateOf<ImageProxy?>(null) }
     var resultString by remember { mutableStateOf("") }
+
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "home"
     ) {
-
-//        composable(route = "main") {
-//            CameraView(
-//                navController=navController,
-//                applicationContext = applicationContext
-//            )
-//        }
-//メモ
         composable(route = "home"){
             HomeView(navController=navController)
         }
@@ -59,27 +52,11 @@ fun Navigation() {
         }
         composable(route = "result/card") {
 //            ResultCardView(resultString)
-            ResultCardView()
+            ResultCardView(navController)
         }
         composable(route = "result/list") {
             ResultListView(navController =navController, names = arrayOf("a"))
         }
-        
-//メモ
-//        composable(route = "page2") {
-//            page2(navController)
-//        }
-//        composable(
-//            route = "page3/{id}/{title}",
-//            arguments = listOf(
-//                navArgument("id") { type = NavType.IntType },
-//                navArgument("title") { type = NavType.StringType }
-//            )
-//        ){arguments ->
-//            val id = arguments.arguments?.getInt("id") ?: ""
-//            val title = arguments.arguments?.getString("title") ?: ""
-//            page3(id,title)
-//        }
     }
 }
 

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -45,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
+import androidx.navigation.NavHostController
 import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.R
 import com.kotlincocktail.pourpal.ui.theme.Black
@@ -57,9 +57,8 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ResultCardView(
-//    cocktails: List<Cocktail>
-) {
+fun ResultCardView(navController: NavHostController) {
+
     val cocktails = listOf(
             Cocktail(
                 cocktail_id = 1,
