@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 data class Recipe (
     @PrimaryKey val ingredient_id: Int,
     val ingredient_name: String,
-    val amount: Int,
-    val unit: String
+    val amount: Int?,
+    val unit: String?
 )
