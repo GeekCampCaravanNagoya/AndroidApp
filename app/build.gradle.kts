@@ -86,7 +86,6 @@ dependencies {
     //Firebaseの依存関係
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
 
-    //DatabaseのROOMライブラリ
     val room_version = "2.5.0"
 
     implementation("androidx.room:room-runtime:$room_version")
