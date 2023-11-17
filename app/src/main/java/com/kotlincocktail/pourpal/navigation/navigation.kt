@@ -15,6 +15,7 @@ import com.kotlincocktail.pourpal.views.HomeView
 import com.kotlincocktail.pourpal.views.MainView
 import com.kotlincocktail.pourpal.views.LoadingView
 import com.kotlincocktail.pourpal.views.ResultCardView
+import com.kotlincocktail.pourpal.views.SearchView
 
 @Composable
 fun Navigation() {
@@ -23,7 +24,7 @@ fun Navigation() {
     var resultString by remember { mutableStateOf("") }
     NavHost(
         navController = navController,
-        startDestination = "main"
+        startDestination = "home"
     ) {
 
 //        composable(route = "main") {
@@ -37,6 +38,9 @@ fun Navigation() {
             HomeView(navController=navController)
         }
 
+        composable(route = "search") {
+            SearchView(navController=navController)
+        }
         composable(route = "main") {
             MainView(navController=navController)
         }

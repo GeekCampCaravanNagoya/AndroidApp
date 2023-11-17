@@ -63,7 +63,7 @@ fun HomeView(navController: NavController) {
         )
         //カメラボタン
         Button(
-            onClick = { navController.navigate("main") },
+            onClick = { navController.navigate("camera") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkGray,
                 contentColor = Gray
@@ -90,7 +90,7 @@ fun HomeView(navController: NavController) {
         }
         //検索ボタン
         Button(
-            onClick = { navController.navigate("main") },
+            onClick = { navController.navigate("search") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkGray,
                 contentColor = Gray
