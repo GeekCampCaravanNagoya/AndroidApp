@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -116,14 +117,14 @@ fun ResultCardView(
                     .padding(40.dp)
             ) {// TODO リスト表示場所
                 LazyColumn(content = {
-                    items(cocktails) {cocktail ->
+                    itemsIndexed(cocktails) {index,cocktail ->
                         Text(
                             fontSize = 25.sp,
                             text = cocktail.cocktail_name,
                             modifier = Modifier.padding(4.dp).clickable{
                                 coroutineScope.launch {
                                     drawerState.close()
-                                    pagerState.animateScrollToPage(cocktail.cocktail_id)
+                                    pagerState.animateScrollToPage(index)
                                 }
                             }
                         )
