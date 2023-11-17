@@ -81,18 +81,6 @@ dependencies {
     //Permission管理
     implementation ("com.google.accompanist:accompanist-permissions:0.23.1")
 
-    //Firebaseの依存関係
-    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
-
-    //カメラの依存関係
-    val camerax = "1.4.0-alpha02"
-    implementation ("androidx.camera:camera-core:${camerax}")
-    implementation ("androidx.camera:camera-camera2:${camerax}")
-    implementation ("androidx.camera:camera-lifecycle:${camerax}")
-    implementation ("androidx.camera:camera-video:${camerax}")
-    implementation ("androidx.camera:camera-view:${camerax}")
-    implementation ("androidx.camera:camera-extensions:${camerax}")
-
     val room_version = "2.5.0"
 
     implementation("androidx.room:room-runtime:$room_version")
