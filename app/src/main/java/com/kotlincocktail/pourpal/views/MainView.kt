@@ -1,6 +1,7 @@
 package com.kotlincocktail.pourpal.views
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -12,9 +13,12 @@ import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun MainView(navController: NavHostController) {
-    Box(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize()) {
         Button(onClick = { navController.navigate("camera") }) {
             Text(text = "カメラを起動")
+        }
+        Button(onClick = { navController.navigate("result/card") }) {
+            Text(text = "リザルトを表示")
         }
     }
 }
