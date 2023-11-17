@@ -13,7 +13,7 @@ import com.kotlincocktail.pourpal.views.LoadingView
 import com.kotlincocktail.pourpal.views.ResultCardView
 
 @Composable
-fun Navigation(applicationContext: Context) {
+fun Navigation() {
     val navController = rememberNavController()
 
 
