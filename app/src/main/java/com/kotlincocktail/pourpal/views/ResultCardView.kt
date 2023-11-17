@@ -213,7 +213,7 @@ fun CardContent(resultString: String, modifier:Modifier) {//TODO　カード表�
                 modifier = Modifier
                     .padding(16.dp)
                     .border(
-                        width = 2.dp,
+                        width = 0.5.dp,
                         color = LightGray,
                         shape = RoundedCornerShape(4.dp)
                     )
@@ -255,7 +255,7 @@ fun CardContent(resultString: String, modifier:Modifier) {//TODO　カード表�
                     .padding(top = 8.dp)
                     .align(Alignment.TopCenter)
                     .border(
-                        width = 2.dp,
+                        width = 0.5.dp,
                         color = LightGray,
                         shape = RoundedCornerShape(4.dp)
                     )
