@@ -1,8 +1,11 @@
 package com.kotlincocktail.pourpal.navigation
 
-import android.content.Context
+import androidx.camera.core.ImageProxy
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavType
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -16,12 +19,11 @@ import com.kotlincocktail.pourpal.views.ResultCardView
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-
-
-
+    var imageProxy by remember { mutableStateOf<ImageProxy?>(null) }
+    var resultString by remember { mutableStateOf("") }
     NavHost(
         navController = navController,
-        startDestination = "home"
+        startDestination = "main"
     ) {
 
 //        composable(route = "main") {
@@ -39,12 +41,24 @@ fun Navigation() {
             MainView(navController=navController)
         }
         composable(route = "camera") {
-            CameraView(navController=navController)
+            CameraView(
+                navController=navController,
+                capturedImageProxy= {
+                    imageProxy = it
+                }
+            )
         }
         composable(route = "loading") {
-            LoadingView(navController=navController)
+            LoadingView(
+                navController=navController,
+                imageProxy = imageProxy,
+                resultString = {
+                    resultString = it
+                }
+            )
         }
         composable(route = "result/card") {
+//            ResultCardView(resultString)
             ResultCardView()
         }
         composable(route = "result/list") {
