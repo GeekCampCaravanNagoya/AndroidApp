@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.mlkit.vision.common.InputImage
 import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainView(navController: NavHostController) {
+
+
+
+
 
     Column(Modifier.fillMaxSize()) {
         Button(onClick = { navController.navigate("camera") }) {

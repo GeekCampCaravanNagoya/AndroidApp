@@ -1,6 +1,6 @@
 package com.kotlincocktail.pourpal.views
 
-import android.widget.Space
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,36 +14,43 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.WineBar
-import androidx.compose.material.icons.outlined.Camera
-import androidx.compose.material.icons.outlined.CameraAlt
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.WineBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.kotlincocktail.pourpal.R
+import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import com.kotlincocktail.pourpal.ui.theme.DarkBlue
 import com.kotlincocktail.pourpal.ui.theme.DarkGray
 import com.kotlincocktail.pourpal.ui.theme.Gray
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
 fun HomeView(navController: NavController) {
+
+    LaunchedEffect("") {
+        // DBから取得
+        CoroutineScope(Dispatchers.IO).launch {
+            val cocktailDao = DatabaseManager.database.CocktailRecipeDao()
+            // 取得結果
+            val result = cocktailDao.getCocktailRecipesWithJoin(intArrayOf(3,114,40 ))
+            Log.d("log", "-------------------------------")
+            for (element in result) {
+                Log.d("log", element.cocktailId.toString() + element.ingredient_name)
+            }
+        }
+    }
 
 
     // バックグラウンドを塗りつぶす
@@ -61,6 +68,7 @@ fun HomeView(navController: NavController) {
             modifier = Modifier.align(Alignment.Center)
 
         )
+
         //カメラボタン
         Button(
             onClick = { navController.navigate("camera") },
@@ -77,8 +85,6 @@ fun HomeView(navController: NavController) {
                     shape = RoundedCornerShape(20)
                 ),
             contentPadding = PaddingValues(0.dp)
-
-
         ) {
             Icon(
                 imageVector = Icons.Filled.CameraAlt,
@@ -120,7 +126,7 @@ fun HomeView(navController: NavController) {
 
         //キープボトルボタン
         Button(
-            onClick = { navController.navigate("main") },
+            onClick = { navController.navigate("home") },
             colors = ButtonDefaults.buttonColors(
                 containerColor = DarkGray,
                 contentColor = Gray
