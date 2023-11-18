@@ -15,6 +15,7 @@ import com.kotlincocktail.pourpal.views.CameraView
 import com.kotlincocktail.pourpal.views.HomeView
 import com.kotlincocktail.pourpal.views.LoadingView
 import com.kotlincocktail.pourpal.views.ResultView
+import com.kotlincocktail.pourpal.views.SearchView
 
 @Composable
 fun Navigation() {
@@ -29,6 +30,12 @@ fun Navigation() {
     ) {
         composable(route = "home"){
             HomeView(navController=navController)
+        }
+        composable(route = "search") {
+            SearchView(
+                navController=navController,
+                cocktails = { cocktails = it },
+                recipes = { recipes = it })
         }
         composable(route = "camera") {
             CameraView(
@@ -49,9 +56,6 @@ fun Navigation() {
         composable(route = "result") {
 //            ResultCardView(resultString)
             ResultView(navController,cocktails,recipes)
-        }
-        composable(route = "search") {
-            HomeView(navController =navController)
         }
     }
 }
