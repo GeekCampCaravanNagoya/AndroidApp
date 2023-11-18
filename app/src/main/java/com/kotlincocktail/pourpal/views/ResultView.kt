@@ -1,7 +1,7 @@
 package com.kotlincocktail.pourpal.views
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,19 +34,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavHostController
 import com.kotlincocktail.pourpal.entity.Cocktail
-import com.kotlincocktail.pourpal.R
+import com.kotlincocktail.pourpal.dao.CocktailRecipeWithId
+import com.kotlincocktail.pourpal.images.ResultIcon
+import com.kotlincocktail.pourpal.images.ResultImage
 import com.kotlincocktail.pourpal.ui.theme.Black
 import com.kotlincocktail.pourpal.ui.theme.DarkBlue
 import com.kotlincocktail.pourpal.ui.theme.DarkRed
@@ -57,7 +56,11 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ResultView(navController: NavHostController, resultList: List<Cocktail>) {
+fun ResultView(
+    navController: NavHostController,
+    resultList: List<Cocktail>,
+    recipes: List<CocktailRecipeWithId>
+) {
 
 //    val resultList = listOf(
 //            Cocktail(
@@ -76,26 +79,7 @@ fun ResultView(navController: NavHostController, resultList: List<Cocktail>) {
 //                cocktail_desc = "テキーラベースの代表的なカクテル",
 //                recipe_desc = "テキーラ、トリプルセック、ライムジュースをシェイク",
 //                cocktail_img = "margarita.jpg"
-//            ),
-//            Cocktail(
-//                cocktail_id = 2,
-//                cocktail_name = "モヒート",
-//                cocktail_name_english = "Mojito",
-//                base_name = "ラム",
-//                technique_name = "ビルド",
-//                taste_name = "スウィート",
-//                style_name = "ロング",
-//                alcohol = 10,
-//                top_name = "ミント",
-//                glass_name = "ハイボールグラス",
-//                type_name = "リフレッシング",
-//                cocktail_digest = "ミントの爽やかさが魅力",
-//                cocktail_desc = "ラムベースの爽やかなカクテル",
-//                recipe_desc = "ラム、ミント、砂糖、ソーダ水をミックス",
-//                cocktail_img = "mojito.jpg"
-//    )
-//     //さらにダミーデータを追加する場合は、このようにリストに追加していきます
-//    )
+//            )
     val pagerState = rememberPagerState(pageCount = { resultList.size })
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
@@ -137,7 +121,7 @@ fun ResultView(navController: NavHostController, resultList: List<Cocktail>) {
                             text = cocktail.cocktail_name,
                             modifier = Modifier
                                 .padding(4.dp)
-                                .clickable{
+                                .clickable {
                                     coroutineScope.launch {
                                         drawerState.close()
                                         pagerState.animateScrollToPage(index)
@@ -152,7 +136,9 @@ fun ResultView(navController: NavHostController, resultList: List<Cocktail>) {
         drawerState = drawerState
     ){
         Box(
-            modifier = Modifier.background(DarkBlue).fillMaxSize(),
+            modifier = Modifier
+                .background(DarkBlue)
+                .fillMaxSize(),
             contentAlignment = Center
         ){
             HorizontalPager(
@@ -165,8 +151,9 @@ fun ResultView(navController: NavHostController, resultList: List<Cocktail>) {
                 val pageOffset = ((pagerState.currentPage - page) + pagerState.currentPageOffsetFraction).absoluteValue
                 CardContent(
                     cocktail = resultList[page],
+                    recipes = recipes,
                     modifier = Modifier
-                        .height((680 - (pageOffset * 60)).dp)
+                        .height((780 - (pageOffset * 60)).dp)
                         .fillMaxWidth()
                         .graphicsLayer {
                             alpha = lerp(
@@ -201,7 +188,7 @@ fun ResultView(navController: NavHostController, resultList: List<Cocktail>) {
 }
 
 @Composable
-fun CardContent(modifier: Modifier, cocktail: Cocktail) {//TODO　カード表示の場所
+fun CardContent(modifier: Modifier, cocktail: Cocktail, recipes: List<CocktailRecipeWithId>) {//TODO　カード表示の場所
     ElevatedCard(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
@@ -211,6 +198,7 @@ fun CardContent(modifier: Modifier, cocktail: Cocktail) {//TODO　カード表�
             Box(
                 modifier = Modifier
                     .padding(16.dp)
+                    .fillMaxSize()
                     .border(
                         width = 0.5.dp,
                         color = LightGray,
@@ -218,15 +206,7 @@ fun CardContent(modifier: Modifier, cocktail: Cocktail) {//TODO　カード表�
                     )
             ) {
                 Column(Modifier.padding(8.dp)) {
-                    Image(
-                        painter = painterResource(id = R.drawable.templatecocktail),
-                        contentDescription = "",
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
-                            .align(CenterHorizontally),
-                        contentScale = ContentScale.FillWidth
-                    )
+                    ResultImage(key = cocktail.cocktail_name)
                     Row(
                         Modifier
                             .fillMaxWidth(1f)
@@ -234,10 +214,10 @@ fun CardContent(modifier: Modifier, cocktail: Cocktail) {//TODO　カード表�
                     ) {
                         Text(text = "作り方", fontSize = 20.sp, modifier = Modifier.align(Bottom))
                         Spacer(modifier = Modifier.weight(1f))
-                        for (i in 0..2){
-                            Column(modifier = Modifier.width(52.dp), horizontalAlignment = CenterHorizontally) {
-                                Image(painter = painterResource(id = R.drawable.loading_icon), contentDescription = "")
-                                Text(text = "ジン",textAlign = TextAlign.Center, modifier = Modifier.padding(4.dp), fontSize = 10.sp)
+                        Log.d("recipe", recipes.size.toString())
+                        for (i in recipes){
+                            if (i.cocktailId == cocktail.cocktail_id){
+                                ResultIcon(i)
                             }
                         }
                     }
