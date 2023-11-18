@@ -58,17 +58,71 @@ fun LoadingView(
                 textRecognizer.process(image)
                     .addOnSuccessListener { visionText ->
                         // 解析結果
-                        Log.d("OCR", visionText.text)
-                        val cocktailNames = visionText.text.split("\n")
-                        // DBから取得
+                        //Log.d("OCR", visionText.text)
+                        // visionText.textの中の空白を改行に変換
+                        val cocktailNames = visionText.text.replace(" ", "\n").split("\n").filter { it.toIntOrNull() == null }
+
+                        // 漢字の一をーに変換
+                        val modifiedCocktailNames = cocktailNames.map { it.replace("一", "ー") }
+                        // 各要素から数字部分と英語を削除
+                        val modifiedCocktailNames0 = modifiedCocktailNames.map { it.replace(Regex("[0-9a-zA-Z]"), "") }
+                        // ()と…と.を削除
+                        val modifiedCocktailNames1 = modifiedCocktailNames0.map { it.replace(Regex("[()….]"), "") }
+                        // 円または税込を含んでいたら削除
+                        val modifiedCocktailNames2 = modifiedCocktailNames1.map { it.replace(Regex("円|税込"), "") }
+                        // 空白データを削除
+                        val modifiedCocktailNames3 = modifiedCocktailNames2.filter { it != "" }
+                        Log.d("OCR333", modifiedCocktailNames3.toString())
+
+                        fun levenshteinDistance(s1: String, s2: String): Int {
+                            val m = s1.length
+                            val n = s2.length
+                            val dp = Array(m + 1) { IntArray(n + 1) }
+                        
+                            for (i in 0..m) {
+                                for (j in 0..n) {
+                                    if (i == 0 || j == 0) {
+                                        dp[i][j] = i + j
+                                    } else {
+                                        dp[i][j] = minOf(
+                                            dp[i - 1][j] + 1,
+                                            dp[i][j - 1] + 1,
+                                            dp[i - 1][j - 1] + if (s1[i - 1] == s2[j - 1]) 0 else 1
+                                        )
+                                    }
+                                }
+                            }
+                        
+                            return dp[m][n]
+                        }
+
+                        // データベースから取得する処理
                         CoroutineScope(Dispatchers.IO).launch {
                             val cocktailDao = DatabaseManager.database.CocktailDao()
                             val cocktailRecipeDao = DatabaseManager.database.CocktailRecipeDao()
-                            // 取得結果
-                            val cocktails = cocktailDao.findCocktailsByName(cocktailNames)
-                            val cocktailIds = cocktails.map { it.cocktail_id }.toIntArray()
+
+                            // 検索対象の名前リスト
+                            val searchNames = modifiedCocktailNames3.distinct() // 重複を除去
+
+                            // 2文字以内の誤差でヒットするカクテルを格納するリスト
+                            val matchedCocktails = mutableListOf<Cocktail>()
+
+                            // データベースから全てのカクテルを取得
+                            val allCocktails = cocktailDao.getAll()
+
+                            for (name in modifiedCocktailNames) {
+                                for (cocktail in allCocktails) {
+                                    // 2文字以内の誤差でヒットするカクテルを抽出
+                                    if (levenshteinDistance(name, cocktail.cocktail_name) <= 2) {
+                                        matchedCocktails.add(cocktail)
+                                    }
+                                }
+                            }
+
+                            val uniqueMatchedCocktails = matchedCocktails.toSet().toList()
+                            val cocktailIds = uniqueMatchedCocktails.map { it.cocktail_id }.toIntArray()
                             val recipes = cocktailRecipeDao.getCocktailRecipesWithJoin(cocktailIds)
-                            resultList(cocktails)
+                            resultList(uniqueMatchedCocktails)
                         }
                     }
                     .addOnFailureListener { exc ->
