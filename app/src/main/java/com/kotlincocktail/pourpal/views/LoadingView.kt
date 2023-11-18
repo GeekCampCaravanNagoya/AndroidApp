@@ -30,6 +30,7 @@ import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
 import com.google.mlkit.vision.text.japanese.JapaneseTextRecognizerOptions
 import com.kotlincocktail.pourpal.R
+import com.kotlincocktail.pourpal.dao.CocktailRecipeWithId
 import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.helpers.DatabaseManager
 import com.kotlincocktail.pourpal.ui.theme.Black
@@ -44,7 +45,8 @@ import kotlinx.coroutines.launch
 fun LoadingView(
     navController: NavHostController,
     imageProxy: ImageProxy?,
-    resultList: (List<Cocktail>) -> Unit
+    cocktails: (List<Cocktail>) -> Unit,
+    recipes: (List<CocktailRecipeWithId>) -> Unit
 ) {
     val textRecognizer: TextRecognizer by lazy {
         TextRecognition.getClient(
@@ -68,7 +70,9 @@ fun LoadingView(
                             val cocktails = cocktailDao.findCocktailsByName(cocktailNames)
                             val cocktailIds = cocktails.map { it.cocktail_id }.toIntArray()
                             val recipes = cocktailRecipeDao.getCocktailRecipesWithJoin(cocktailIds)
-                            resultList(cocktails)
+                            cocktails(cocktails)
+                            recipes(recipes)
+
                         }
                     }
                     .addOnFailureListener { exc ->

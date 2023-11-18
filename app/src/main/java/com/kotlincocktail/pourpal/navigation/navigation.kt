@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.kotlincocktail.pourpal.dao.CocktailRecipeWithId
 import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.views.CameraView
 import com.kotlincocktail.pourpal.views.HomeView
@@ -19,7 +20,8 @@ import com.kotlincocktail.pourpal.views.ResultView
 fun Navigation() {
     val navController = rememberNavController()
     var imageProxy by remember { mutableStateOf<ImageProxy?>(null) }
-    var resultList by remember { mutableStateOf<List<Cocktail>>(emptyList()) }
+    var cocktails by remember { mutableStateOf<List<Cocktail>>(emptyList()) }
+    var recipes by remember { mutableStateOf<List<CocktailRecipeWithId>>(emptyList()) }
 
     NavHost(
         navController = navController,
@@ -40,14 +42,13 @@ fun Navigation() {
             LoadingView(
                 navController=navController,
                 imageProxy = imageProxy,
-                resultList = {
-                    resultList = it
-                }
+                cocktails = { cocktails = it },
+                recipes = { recipes = it }
             )
         }
         composable(route = "result") {
 //            ResultCardView(resultString)
-            ResultView(navController,resultList)
+            ResultView(navController,cocktails,recipes)
         }
         composable(route = "search") {
             HomeView(navController =navController)
