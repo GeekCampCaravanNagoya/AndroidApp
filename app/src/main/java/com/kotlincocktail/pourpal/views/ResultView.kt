@@ -1,7 +1,9 @@
 package com.kotlincocktail.pourpal.views
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,18 +32,26 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavHostController
+import com.kotlincocktail.pourpal.R
 import com.kotlincocktail.pourpal.entity.Cocktail
 import com.kotlincocktail.pourpal.dao.CocktailRecipeWithId
 import com.kotlincocktail.pourpal.images.ResultIcon
@@ -49,11 +59,13 @@ import com.kotlincocktail.pourpal.images.ResultImage
 import com.kotlincocktail.pourpal.ui.theme.Black
 import com.kotlincocktail.pourpal.ui.theme.DarkBlue
 import com.kotlincocktail.pourpal.ui.theme.DarkRed
+import com.kotlincocktail.pourpal.ui.theme.Gorld
 import com.kotlincocktail.pourpal.ui.theme.LightGray
 import com.kotlincocktail.pourpal.ui.theme.Red
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
+@SuppressLint("MutableCollectionMutableState")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ResultView(
@@ -84,6 +96,7 @@ fun ResultView(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Open)
     val coroutineScope = rememberCoroutineScope()
     val scope = rememberCoroutineScope()
+    val bookmarkList = remember { mutableStateOf(List(10) { false }.toMutableList()) }
 
     ModalNavigationDrawer(
         modifier = Modifier
@@ -188,7 +201,11 @@ fun ResultView(
 }
 
 @Composable
-fun CardContent(modifier: Modifier, cocktail: Cocktail, recipes: List<CocktailRecipeWithId>) {//TODO　カード表示の場所
+fun CardContent(
+    modifier: Modifier,
+    cocktail: Cocktail,
+    recipes: List<CocktailRecipeWithId>
+) {//TODO　カード表示の場所
     ElevatedCard(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
@@ -247,6 +264,37 @@ fun CardContent(modifier: Modifier, cocktail: Cocktail, recipes: List<CocktailRe
                     .padding(8.dp),
                 text = cocktail.cocktail_name
             )
+            val bookmarkModifier = Modifier
+                .width(30.dp)
+                .clickable {
+
+                }
+            Box(modifier = Modifier
+                .align(TopEnd)
+                .padding(end = 50.dp)){
+                if(false){
+                    bookmark(
+                        colorFilter = ColorFilter.tint(Gorld),
+                        modifier = bookmarkModifier
+                    )
+                }else{
+                    bookmark(
+                        colorFilter = ColorFilter.tint(LightGray),
+                        modifier = bookmarkModifier
+                    )
+                }
+            }
         }
     }
+}
+
+@Composable
+fun bookmark(colorFilter:ColorFilter,modifier:Modifier) {
+    Image(
+        painter = painterResource(id = R.drawable.bookmark),
+        contentDescription = "bookmark",
+        colorFilter = colorFilter,
+        modifier = modifier,
+        contentScale = ContentScale.FillWidth
+    )
 }
